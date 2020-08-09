@@ -1,0 +1,28 @@
+
+from selenium import webdriver
+from time import sleep
+import re
+from datetime import datetime
+
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
+Path="C:\chromedriver.exe"
+driver=webdriver.Chrome(Path)
+driver.maximize_window()
+driver.implicitly_wait(20)
+driver.get('https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv')
+table = driver.find_element_by_xpath('//*[@class="js-csv-data csv-data js-file-line-container"]')
+country_element = table.find_element_by_xpath("//td[contains(., 'India')]")
+row = country_element.find_element_by_xpath("./..")
+li=[]
+for x in row.text.split(" "):
+    li.append(x)
+
+y=[li[-7],li[-6],li[-5],li[-4],li[-3],li[-2],li[-1]]
+x=['7','6','5','4','3','2','1']
+x_pos = [i for i, _ in enumerate(x)]
+plt.bar(x_pos, y, color='green')
+plt.xlabel("days prior")
+plt.ylabel("active cases")
+plt.xticks(x_pos, x)
+plt.show()
